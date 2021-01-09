@@ -12,7 +12,7 @@
           <a href="#" class="nav-link">Etkinlikler</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Topluluklar</a>
+          <a href="#" class="nav-link" @click.prevent="clickAllCommunity">Topluluklar</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">Etkinlik Kayıtları</a>
@@ -46,11 +46,12 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 //import API from "../services/API"
 export default {
   methods: {
     ...mapGetters(["getUser"]),
+    ...mapActions(["getCommunitiesAction"]),
     ...mapMutations(["setUser","setArray"]),
     login() {
       window.open(
@@ -69,9 +70,9 @@ export default {
       }
     },
 
-    // clickHomePage(){
-
-    // }
+    async clickAllCommunity(){
+      await this.getCommunitiesAction();
+    }
 
   },
   computed: {

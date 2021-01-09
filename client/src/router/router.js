@@ -8,9 +8,10 @@ import Main from "../components/Other/Main"
 Vue.use(VueRouter);
 
 const routes = [
-    { path: "/", component: Main, name: "home" }
+    { path: "/", component: Main, name: "home" },
+    { path: "/my-communities", component: Main, name: "my-communities" },
+    { path: "/last-events", component: Main, name: "last-events" }
 ]
-
 const router = new VueRouter({
     routes,
 })

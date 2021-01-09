@@ -141,7 +141,7 @@ const getUserEvents = async (req, res, next) => {
     try {
 
         let events = await Event.find({ userID: req.user._id }).populate({path:'userID'}).exec();
-        console.log(events)
+
         return res.json(events)
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
@@ -152,7 +152,7 @@ const getMyCommunities = async (req, res, next) => {
     try {
 
         let communities = await Community.find({"members":{$in:[req.user._id]}})
-        console.log(communities)
+
         return res.json(communities)
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })

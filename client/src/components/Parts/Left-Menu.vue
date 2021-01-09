@@ -1,18 +1,19 @@
 <template>
   <ul class="d-flex flex-column justify-content-start">
-    <li class="nav-item active d-flex">
+    <li class="nav-item active d-flex" @click="clickDiscover($event)">
       <i class="fab fa-reddit-alien"></i>
-      <a class="nav-link" @click="clickDiscover">Keşfet</a>
-    </li>
-    <li class="nav-item d-flex">
-      <i class="fas fa-fan"></i>
-      <a class="nav-link" @click.prevent="clickLastActivity" href="">Son Aktiviteler</a>
-      <div class="count">1</div>
+      <a class="nav-link">Keşfet</a>
     </li>
 
-    <li class="nav-item d-flex">
+    <li class="nav-item d-flex" @click.prevent="clickLastActivity($event)">
+      <i class="fas fa-fan"></i>
+      <a class="nav-link" href="">Son Aktiviteler</a>
+      <div class="count">{{ eventSize }}</div>
+    </li>
+
+    <li class="nav-item d-flex" @click.prevent="clickMyCommunities($event)">
       <i class="fas fa-american-sign-language-interpreting"></i>
-      <a class="nav-link" @click.prevent="clickMyCommunities" href="">Topluluklarım</a>
+      <a class="nav-link" href="">Topluluklarım</a>
     </li>
 
     <li class="nav-item d-flex">
@@ -23,6 +24,9 @@
       <i class="fas fa-ticket-alt"></i>
       <a class="nav-link" href="">Biletlerim</a>
     </li>
+    {{
+      eventSize
+    }}
   </ul>
 </template>
 
@@ -30,19 +34,65 @@
 import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
+  data() {
+    return {
+      eventSize: 0,
+    };
+  },
   methods: {
-    ...mapActions(["getActivitiesAction", "getUserEvents","myCommunities"]),
+    ...mapActions(["getActivitiesAction", "getUserEvents", "myCommunities"]),
     ...mapMutations(["setArray"]),
-    ...mapGetters(["getUser","getArray"]),
-    async clickDiscover() {
+    ...mapGetters(["getUser", "getArray"]),
+    async clickDiscover(e) {
       await this.getActivitiesAction();
+
+      if (this.$route.name != "home") {
+        this.$router.push({ name: "home" });
+      }
+
+      this.classControl(e.target);
     },
-    async clickLastActivity() {
+    async clickLastActivity(e) {
       await this.getUserEvents();
+      if (this.$route.name != "last-events") {
+        this.$router.push({ name: "last-events" });
+      }
+      this.eventSize = this.getArray().length;
+      this.classControl(e.target);
     },
-    async clickMyCommunities(){
+    async clickMyCommunities(e) {
       await this.myCommunities();
-    }
+      if (this.$route.name != "my-communities") {
+        this.$router.push({ name: "my-communities" });
+      }
+
+      this.classControl(e.target);
+    },
+
+    classControl(element) {
+      let elements = document.querySelectorAll(".nav-item");
+      elements.forEach((e) => {
+        e.classList.remove("active");
+      });
+
+      if (element.classList[0] == "nav-link") {
+        element.parentElement.classList.forEach((Class) => {
+          if (Class == "active") {
+            return element.parentElement.classList.remove("active");
+          } else {
+            return element.parentElement.classList.add("active");
+          }
+        });
+      } else {
+        element.classList.forEach((Class) => {
+          if (Class == "active") {
+            return element.classList.remove("active");
+          } else {
+            return element.classList.add("active");
+          }
+        });
+      }
+    },
   },
 };
 </script>
@@ -52,6 +102,7 @@ ul {
   list-style-type: none;
 }
 .nav-item {
+  cursor: pointer;
   padding: 0.3rem;
 }
 .nav-item i {

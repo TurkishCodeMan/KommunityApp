@@ -1,5 +1,5 @@
 <template>
-  <div class="container mb-3">
+  <div class="container mb-3" v-if="people._id!=user._id">
     <div class="user-image">
       <img
         class="img-fluid img-thumbnail rounded-circle"
@@ -10,7 +10,7 @@
     </div>
     <div class="content-info">
       <a class="header" href="#">{{people.name}}</a>
-      <p class="nickname">@hsynaltklc</p>
+      <p class="nickname">@{{people.tag}}</p>
     </div>
     <div class="subscribe">
       <button class="btn btn-secondary btn-sm">Takip Et</button>
@@ -19,8 +19,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-  props:{people:{type:Object}}
+  props:{people:{type:Object}},
+  methods:{
+    ...mapGetters(["getUser"])
+  },
+  computed:{
+    user(){
+      return this.getUser();
+    }
+  }
+
 };
 </script>
 

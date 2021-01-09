@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="array != undefined">
     <div class="search">
       <h5 v-if="array[0].eventType == undefined">
         <select id="" class="select">
@@ -16,7 +16,12 @@
     </div>
     <div v-if="array.length > 0">
       <div class="row" v-if="array[0].location != undefined">
-        <app-card v-for="a in array" :key="a.index" :a="a"></app-card>
+        <app-card
+          v-for="a in array"
+          :key="a.index"
+          :a="a"
+       
+        ></app-card>
       </div>
       <div class="row" v-if="array[0].eventType != undefined">
         <app-event-card
@@ -25,7 +30,6 @@
           :a="a"
         ></app-event-card>
       </div>
-  
     </div>
   </div>
 </template>

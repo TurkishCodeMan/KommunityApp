@@ -1,5 +1,7 @@
 <template>
-  <div :class="a.participants?'col-md-12 mb-3 card-container':'col-md-6 mb-3'">
+  <div
+    :class="a.participants ? 'col-md-12 mb-3 card-container' : 'col-md-6 mb-3'"
+  >
     <div class="card">
       <img src="../../assets/devops.jpg" alt="" class="img-fluid" />
       <div class="content">
@@ -15,7 +17,15 @@
           <h6 v-if="a.participants" class="member">
             {{ a.participants.length }} Katılımcı
           </h6>
-          <button class="btn btn-warning btn-sm">Katıl</button>
+          <button v-if="!memberrControl && a.members" class="btn btn-warning btn-sm">
+            Katıl
+          </button>
+            <button v-if="a.participants" class="btn btn-warning btn-sm">
+            Etkinliğe git
+          </button>
+          <button v-if="!a.participants && memberrControl" class="btn btn-secondary btn-sm">
+            Ayrıl
+          </button>
         </div>
       </div>
     </div>
@@ -23,13 +33,35 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: { a: { type: Object } },
+  data() {
+    return {
+      memberrControl: false,
+    };
+  },
+  methods: {
+    ...mapGetters(["getUser"]),
+    memberControl() {
+      if (this.a.members) {
+        this.a.members.forEach((element) => {
+          if (element == this.getUser()._id) {
+            this.memberrControl = true;
+          }
+        });
+      }
+    },
+  },
+
+  async created() {
+    await this.memberControl();
+  },
 };
 </script>
 
 <style scoped>
-.bg-activity{
+.bg-activity {
   background-color: #fbfbfb;
 }
 .card {
