@@ -3,6 +3,7 @@ const Community = require("../models/Community");
 const Activity = require("../models/Activity");
 const Event = require("../models/Event")
 
+
 const getAllUser = async (req, res, next) => {
     try {
         const Users = await User.find();
@@ -14,8 +15,19 @@ const getAllUser = async (req, res, next) => {
 
 const getAllCommunity = async (req, res, next) => {
     try {
-        const Communities = await Community.find();
-        return res.json(Communities);
+        const communities = await Community.find().populate("members");
+
+        return res.json(communities);
+    } catch (error) {
+        return res.json({ message: "Server Error" + error.message })
+    }
+}
+
+const getAllActivity = async (req, res, next) => {
+    try {
+        const activity = await Activity.find().populate("participants");
+    
+        return res.json(activity);
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
     }
@@ -35,7 +47,7 @@ const getCommunityById = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
     try {
         let userID = req.params.id;
-        const user = await User.findOne({ _id: communityID });
+        const user = await User.findOne({ _id: userID });
         return res.json(user);
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
@@ -52,8 +64,11 @@ const createCommunity = async (req, res, next) => {
             description: req.body.description
         })
         await community.save();
-        //community.organizators.push(req.user._id)
-        //  await community.save();
+        // community.organizators.push(req.user._id)
+        // await community.save();
+        //Event Trigger
+        const eventEmitter = req.app.get("eventEmitter");
+        eventEmitter.emit("createCommunity", community)
         return res.json(community)
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
@@ -91,6 +106,9 @@ const subscribeCommunity = async (req, res, next) => {
         const community = await Community.findOne({ _id: req.params.id });
         community.members.push(req.user._id);
         await community.save();
+        const user = await User.findOne({ _id: req.user._id });
+        user.members.push(community._id);
+        await user.save();
         return res.json(community);
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
@@ -109,6 +127,7 @@ const subscribeActivity = async (req, res, next) => {
 const getRandomUser = async (req, res, next) => {
     try {
         var random = Math.floor(Math.random() * 10)
+        random = 0;
         const users = await User.find().skip(random).exec();
         return res.json(users)
     } catch (error) {
@@ -120,8 +139,21 @@ const getRandomUser = async (req, res, next) => {
 //Kullanılması için her olaya bir event ekleyip denetlenebilir
 const getUserEvents = async (req, res, next) => {
     try {
-        let events = await Event.find({ userID: req.user._id });
+
+        let events = await Event.find({ userID: req.user._id }).populate({path:'userID'}).exec();
+        console.log(events)
         return res.json(events)
+    } catch (error) {
+        return res.json({ message: "Server Error" + error.message })
+    }
+}
+
+const getMyCommunities = async (req, res, next) => {
+    try {
+
+        let communities = await Community.find({"members":{$in:[req.user._id]}})
+        console.log(communities)
+        return res.json(communities)
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
     }
@@ -131,6 +163,7 @@ const getUserEvents = async (req, res, next) => {
 module.exports = {
     getAllUser,
     getAllCommunity,
+    getAllActivity,
     getCommunityById,
     getUserById,
     createCommunity,
@@ -138,5 +171,7 @@ module.exports = {
     subscribeCommunity,
     subscribeActivity,
     getRandomUser,
-    getUserEvents
+    getUserEvents,
+    getMyCommunities
+  
 }

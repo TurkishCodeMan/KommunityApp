@@ -13,6 +13,19 @@ const userSchema = mongoose.Schema({
       ref: 'Community',
     },
   ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }
+
+  ]
 });
 
 module.exports = mongoose.model('User', userSchema);

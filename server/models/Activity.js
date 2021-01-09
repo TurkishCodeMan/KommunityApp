@@ -13,12 +13,11 @@ const activitySchema = mongoose.Schema({
   ],
   endTime: { type: Date, default: (Date.now()+1) },
   happened: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
   // expireAt:{
   //   type:Date,
   //   index:{expires:this.endTime}
   // }
 
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Activity', activitySchema);

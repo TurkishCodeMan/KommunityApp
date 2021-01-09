@@ -6,15 +6,22 @@ const isAuthenticated=require("../middlewares/isAuthenticated")
 
 
 //Yardımcı Rotalar
-router.get("/random-user",isAuthenticated,communityController.getRandomUser)
+router.get("/random-user",communityController.getRandomUser)
 
-router.get("/user-events",isAuthenticated,communityController.getUserEvents);
+router.get("/user-events",communityController.getUserEvents);
+
 
 // All-User
 router.get('/all-users', communityController.getAllUser);
 
+//All-Activity
+router.get("/all-activity",communityController.getAllActivity)
+
 // All Community
-router.get('/all-community', communityController.getAllCommunity);
+router.get('/', communityController.getAllCommunity);
+
+//My Communities
+router.get("/my-communities",communityController.getMyCommunities)
 
 // Get One Community
 router.get('/community/:id', communityController.getCommunityById);

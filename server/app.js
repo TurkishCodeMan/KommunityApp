@@ -9,6 +9,11 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 
+const EventEmitter=require("events")
+const eventEmitter=new EventEmitter();
+eventEmitter.setMaxListeners(1) 
+app.set("eventEmitter",eventEmitter)
+
 // Passport Config
 require('./config/passport-config')(passport);
 
@@ -26,7 +31,17 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+app.use(require("./controller/eventController"));
+
 // Routes
+app.use("/api/session", (req, res, next) => {
+  if (req.user) {
+    return res.json({ user: req.user })
+  }
+  return res.json({ user: undefined })
+})
 app.use('/api', require('./routes/auth'));
 app.use("/api", require("./routes/community"));
 

@@ -1,0 +1,115 @@
+<template>
+  <div class="nav d-flex pt-3 shadow bg-white rounded">
+    <nav class="text-center w-100 m-auto">
+      <ul class="d-flex navbar container">
+        <li class="nav-item">
+          <a href="#" class="navbar-brand">Kommunity</a>
+        </li>
+        <li class="nav-item">
+          <a  href="#" class="nav-link">Ana Sayfa</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Etkinlikler</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Topluluklar</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Etkinlik Kayıtları</a>
+        </li>
+        <li class="nav-item">
+          <input
+            type="text"
+            class="form-control search"
+            placeholder="Kommunity'de Ara"
+          />
+        </li>
+        <li class="nav-item mr-2">
+          <button class="btn btn-success">Topluluk Oluştur</button>
+        </li>
+        <li class="nav-item" v-if="user != undefined">
+          <img
+            :src="user.imageUrl"
+            alt=""
+            class="img-thumbnail rounded-circle mr-2"
+            width="60"
+          />
+          <i class="far fa-bell"></i>
+        </li>
+        <li class="nav-item" v-if="user == undefined">
+          <a href="#" class="text-dark" @click="login">Login</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapMutations } from "vuex";
+//import API from "../services/API"
+export default {
+  methods: {
+    ...mapGetters(["getUser"]),
+    ...mapMutations(["setUser","setArray"]),
+    login() {
+      window.open(
+        "/api/login",
+        "mywindow",
+        "location=1,status=1,scrollbars=1, width=800,height=800"
+      );
+      window.addEventListener("message", this.myCallBack);
+    },
+     myCallBack(message) {
+      if (message.data.user) {
+        console.log(message.data)
+        this.setUser(message.data.user);
+        window.removeEventListener("message", this.myCallBack);
+        this.$router.push({ name: "home" });
+      }
+    },
+
+    // clickHomePage(){
+
+    // }
+
+  },
+  computed: {
+    user() {
+      return this.getUser();
+    },
+  },
+};
+</script>
+
+<style scoped>
+.nav {
+  font-family: "Work Sans", sans-serif;
+  box-shadow: 2px 0px 5px 2px rgba(0, 0, 0, 0.2);
+}
+.navbar {
+  list-style-type: none;
+}
+.nav-item .nav-link {
+  text-decoration: none;
+  color: #adadad;
+  font-size: 0.9rem;
+}
+.nav-item .nav-link:hover {
+  color: #343a44;
+}
+
+.navbar-brand {
+  color: #333333;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+.btn {
+  text-align: center;
+}
+
+ul:last-child {
+  font-size: 1.6rem;
+  color: #adadad;
+}
+</style>
