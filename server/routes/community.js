@@ -39,7 +39,7 @@ router.get('/subscribe-community/:id', communityController.subscribeCommunity);
 router.get('/subscribe-activity/:id', communityController.subscribeActivity);
 
 // Create A Activity
-router.post('/create-activity', communityController.createActivity);
+router.post('/create-activity/:id', communityController.createActivity);
 
 
 

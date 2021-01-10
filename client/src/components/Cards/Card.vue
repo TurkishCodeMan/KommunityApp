@@ -17,7 +17,7 @@
           <h6 v-if="a.participants" class="member">
             {{ a.participants.length }} Katılımcı
           </h6>
-          <button v-if="!memberrControl && a.members" class="btn btn-warning btn-sm">
+          <button @click.prevent="subscribeACommunity(a._id)" v-if="!memberrControl && a.members" class="btn btn-warning btn-sm">
             Katıl
           </button>
             <button v-if="a.participants" class="btn btn-warning btn-sm">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: { a: { type: Object } },
   data() {
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     ...mapGetters(["getUser"]),
+    ...mapActions(["subscribeCommunity"]),
     memberControl() {
       if (this.a.members) {
         this.a.members.forEach((element) => {
@@ -52,6 +53,9 @@ export default {
         });
       }
     },
+    async subscribeACommunity(communityID){
+      await this.subscribeCommunity(communityID);
+    }
   },
 
   async created() {

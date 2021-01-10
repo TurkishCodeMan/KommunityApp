@@ -11,12 +11,16 @@
           />
           <p class="font-weight-bold mr-2">{{ a.userID.name }}</p>
           <div v-if="a.eventType == 'createCommunity'" class="d-flex">
-            <p class="text-muted mr-2">bir topluluğa katıldı</p>
+            <p class="text-muted mr-2">bir topluluk oluştur</p>
             <p class="font-weight-bold mr-2">{{ a.community.name }}</p>
           </div>
           <div v-if="a.eventType == 'createActivity'" class="d-flex">
             <p class="text-muted mr-2">bir etkinliğe gidiyor</p>
             <p class="font-weight-bold mr-2">{{ a.activity.name }}</p>
+          </div>
+          <div v-if="a.eventType == 'subscribeCommunity'" class="d-flex">
+            <p class="text-muted mr-2">bir topluluğa katıldı</p>
+            <p class="font-weight-bold mr-2">{{ a.community.name }}</p>
           </div>
         </div>
       </div>
@@ -31,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-.card{
-  border:none;
+.card {
+  border: none;
 }
 </style>

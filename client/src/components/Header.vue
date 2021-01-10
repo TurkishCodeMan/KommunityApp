@@ -6,13 +6,15 @@
           <a href="#" class="navbar-brand">Kommunity</a>
         </li>
         <li class="nav-item">
-          <a  href="#" class="nav-link">Ana Sayfa</a>
+          <a href="#" class="nav-link">Ana Sayfa</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">Etkinlikler</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" @click.prevent="clickAllCommunity">Topluluklar</a>
+          <a href="#" class="nav-link" @click.prevent="clickAllCommunity"
+            >Topluluklar</a
+          >
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">Etkinlik Kayıtları</a>
@@ -27,19 +29,31 @@
         <li class="nav-item mr-2">
           <button class="btn btn-success">Topluluk Oluştur</button>
         </li>
-        <li class="nav-item" v-if="user != undefined">
-          <img
-            :src="user.imageUrl"
-            alt=""
-            class="img-thumbnail rounded-circle mr-2"
-            width="60"
-          />
-          <i class="far fa-bell"></i>
+        <li class="nav-item d-flex" v-if="user != undefined">
+          <div class="dropdown">
+            <img
+              :src="user.imageUrl"
+              alt=""
+              class="img-thumbnail rounded-circle mr-2"
+              width="60"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            />
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Profil</a>
+              <a class="dropdown-item" href="#">Bildirimler</a>
+              <a class="dropdown-item" href="#">Ayarlar</a>
+              <a @click.prevent="logoutApp" class="dropdown-item" href="#">Çıkış</a>
+            </div>
+          </div>
+          <i class="far fa-bell mt-3"></i>
         </li>
         <li class="nav-item" v-if="user == undefined">
           <a href="#" class="text-dark" @click="login">Login</a>
         </li>
-        
       </ul>
     </nav>
   </div>
@@ -51,8 +65,8 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["getCommunitiesAction"]),
-    ...mapMutations(["setUser","setArray"]),
+    ...mapActions(["getCommunitiesAction","logout"]),
+    ...mapMutations(["setUser", "setArray"]),
     login() {
       window.open(
         "/api/login",
@@ -61,19 +75,21 @@ export default {
       );
       window.addEventListener("message", this.myCallBack);
     },
-     myCallBack(message) {
+    myCallBack(message) {
       if (message.data.user) {
-        console.log(message.data)
+        console.log(message.data);
         this.setUser(message.data.user);
         window.removeEventListener("message", this.myCallBack);
         this.$router.push({ name: "home" });
       }
     },
 
-    async clickAllCommunity(){
+    async clickAllCommunity() {
       await this.getCommunitiesAction();
+    },
+    async logoutApp(){
+      await this.logout();
     }
-
   },
   computed: {
     user() {

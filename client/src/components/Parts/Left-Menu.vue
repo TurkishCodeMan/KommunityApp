@@ -24,9 +24,7 @@
       <i class="fas fa-ticket-alt"></i>
       <a class="nav-link" href="">Biletlerim</a>
     </li>
-    {{
-      eventSize
-    }}
+  
   </ul>
 </template>
 

@@ -1,7 +1,8 @@
 const User = require("../models/User")
 const Community = require("../models/Community");
 const Activity = require("../models/Activity");
-const Event = require("../models/Event")
+const Event = require("../models/Event");
+const publish  = require("../config/publisher");
 
 
 const getAllUser = async (req, res, next) => {
@@ -56,19 +57,20 @@ const getUserById = async (req, res, next) => {
 }
 
 const createCommunity = async (req, res, next) => {
+
     try {
-        console.log(req.body)
         let community = new Community({
             name: req.body.name,
             location: req.body.location,
             description: req.body.description
         })
         await community.save();
-        // community.organizators.push(req.user._id)
-        // await community.save();
-        //Event Trigger
-        const eventEmitter = req.app.get("eventEmitter");
-        eventEmitter.emit("createCommunity", community)
+        community.organizators.push(req.user._id)
+        await community.save();
+  
+        publish("events",req.user,"createCommunity",community)
+        console.log("Burada")
+
         return res.json(community)
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
@@ -79,7 +81,7 @@ const createCommunity = async (req, res, next) => {
 
 const createActivity = async (req, res, next) => {
     try {
-        console.log(req.body)
+        console.log(req.params.id)
         let activity = new Activity({
             name: req.body.name,
             location: req.body.location,
@@ -90,25 +92,28 @@ const createActivity = async (req, res, next) => {
         await activity.save();
 
         //Activity oluşturan communitye kaydet
-        const community = await Community.findOne({ _id: '5ff5c07bb9236c05cc6e29c0' });
+        const community = await Community.findOne({ _id: req.params.id });
         community.activities.push(activity._id);
         await community.save();
 
         return res.json(activity)
     } catch (error) {
-        return res.json({ message: "Server Error" + error.message })
+        return res.json({ message: "Server Error " + error.message })
 
     }
 }
 
 const subscribeCommunity = async (req, res, next) => {
     try {
+        console.log(req.params.id)
         const community = await Community.findOne({ _id: req.params.id });
         community.members.push(req.user._id);
         await community.save();
         const user = await User.findOne({ _id: req.user._id });
         user.members.push(community._id);
         await user.save();
+
+        publish("events",req.user,"subscribeCommunity",community)
         return res.json(community);
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })

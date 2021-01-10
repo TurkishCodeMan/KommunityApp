@@ -9,13 +9,15 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 
-const EventEmitter=require("events")
-const eventEmitter=new EventEmitter();
-eventEmitter.setMaxListeners(1) 
-app.set("eventEmitter",eventEmitter)
+const EventEmitter = require("events");
+const Community = require('./models/Community');
+const eventEmitter = new EventEmitter();
+eventEmitter.setMaxListeners(1)
+app.set("eventEmitter", eventEmitter)
 
 // Passport Config
 require('./config/passport-config')(passport);
+
 
 // Middlewares
 app.use(cors());
@@ -26,14 +28,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 60,
   keys: ['secretKey'],
+
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-app.use(require("./controller/eventController"));
+require("./config/subscriber")()
+// app.use(require("./controller/eventController"));
 
 // Routes
 app.use("/api/session", (req, res, next) => {
@@ -50,6 +53,28 @@ require('./config/db')();
 
 app.listen(process.env.PORT, process.env.HOST, (err) => {
   if (err) return err;
+
+
+  
+    // let community1 = new Community({
+    //   name: "DevOps Malatya",
+    //   location: "Malatya",
+    //   description: "Güncel Community"
+    // });
+    // community1.save().then(c => {
+    //   c.organizators.push("5ff5cf8fdba016348432b26e")
+    // })
+    // let community2 = new Community({
+    //   name: "Yazılımcılar Burada",
+    //   location: "Mersin",
+    //   description: "Güncel Community"
+    // });
+    // community2.save().then(c => {
+    //   c.organizators.push("5ff5cf8fdba016348432b26e")
+    // })
+  
+
+
 
   console.log('Listening on port 3000');
 });

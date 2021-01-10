@@ -8,35 +8,35 @@ const passportJs = async (passport) => {
     callbackURL: '/api/auth/redirect',
     //   passReqToCallback: true
   },
-  (request, accessToken, refreshToken, profile, done) => {
-    User.findOne({ googleID: profile.id }, (err, user) => {
-      if (err) {
-        return done(err, false);
-      }
+    (request, accessToken, refreshToken, profile, done) => {
+      User.findOne({ googleID: profile.id }, (err, user) => {
+        if (err) {
+          return done(err, false);
+        }
 
-      if (user) {
-        return done(err, user);
-      }
+        if (user) {
+          return done(err, user);
+        }
 
-      console.log('newUser');
-      new User({
-        name: profile.displayName,
-        googleID: profile.id,
-        imageUrl: profile._json.picture,
-      }).save()
-        .then((newUser) => done(err, newUser))
-        .catch((err) => done(err, false));
-    });
-  }));
+        console.log('newUser');
+        new User({
+          name: profile.displayName,
+          googleID: profile.id,
+          imageUrl: profile._json.picture,
+        }).save()
+          .then((newUser) => done(err, newUser))
+          .catch((err) => done(err, false));
+      });
+    }));
 
   passport.serializeUser((user, done) => {
-    console.log('SerializeUser');
+
 
     done(null, user.id);
   });
 
   passport.deserializeUser((id, done) => {
-    console.log('DeserializeUser');
+
     User.findById(id, (err, user) => {
       done(err, user);
     });

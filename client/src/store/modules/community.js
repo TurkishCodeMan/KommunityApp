@@ -1,4 +1,3 @@
-import { getUserEvents } from "../../../../server/controller/community";
 import API from "../../services/API"
 
 const state = {
@@ -28,7 +27,9 @@ const actions = {
         try {
             const data = await API().get("/");
             commit("setArray", data.data);
-
+            if(data.data.length<=0){
+                commit("setArray",["all-communities"])
+             }
         } catch (error) {
             return error.message;
         }
@@ -37,7 +38,9 @@ const actions = {
         try {
             const data = await API().get("/all-activity");
             commit("setArray", data.data);
-
+            if(data.data.length<=0){
+                commit("setArray",["all-activity"])
+             }
         } catch (error) {
             return error.message;
         }
@@ -46,7 +49,9 @@ const actions = {
         try {
             const data = await API().get("/user-events");
             commit("setArray", data.data);
-            console.log(data.data)
+           if(data.data.length<=0){
+              commit("setArray",["user-events"])
+           }
         } catch (error) {
             return error.message;
         }
@@ -64,9 +69,20 @@ const actions = {
         try {
             const data = await API().get("/my-communities");
             commit("setArray", data.data);
-
+            if(data.data.length<=0){
+                commit("setArray",["my-communities"])
+             }
         } catch (error) {
             return error.message;
+        }
+    },
+    async subscribeCommunity({dispatch},communityID){
+        try {
+            const data=await API().get("/subscribe-community/"+communityID)
+        
+        } catch (error) {
+            return error.message;
+
         }
     }
 }
