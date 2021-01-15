@@ -1,9 +1,11 @@
 
+
 import API from "../../services/API"
 
 const state = {
     array: undefined,
     advicePeople: undefined,
+    community:undefined
 
 }
 const getters = {
@@ -12,6 +14,9 @@ const getters = {
     },
     getArray(state) {
         return state.array
+    },
+    getCommunity(state){
+        return state.community;
     }
 }
 
@@ -21,6 +26,9 @@ const mutations = {
     },
     setArray(state, value) {
         state.array = value;
+    },
+    setCommunity(state,value){
+        state.community=value;
     }
 }
 
@@ -107,6 +115,15 @@ const actions = {
             return error.message;
         }
 
+    },
+    async getCommunityById({ commit }, id) {
+        try {
+            const data = await API().get("/community/" + id)
+            console.log(data.data);
+            commit("setCommunity",data.data)
+        } catch (error) {
+            return error.message;
+        }
     }
 }
 

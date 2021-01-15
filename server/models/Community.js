@@ -22,6 +22,13 @@ const communitySchema = mongoose.Schema({
       ref: 'Activity',
     },
   ],
+  type:{type:Boolean,default:false},
+  comments:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Comment",
+    }
+  ]
 });
 
 module.exports = mongoose.model('Community', communitySchema);

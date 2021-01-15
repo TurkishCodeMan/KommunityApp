@@ -37,7 +37,7 @@ const getAllActivity = async (req, res, next) => {
 const getCommunityById = async (req, res, next) => {
     try {
         let communityID = req.params.id;
-        const community = await Community.findOne({ _id: communityID });
+        const community = await Community.findOne({ _id: communityID }).populate("activities"); //JOİN
         return res.json(community);
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })

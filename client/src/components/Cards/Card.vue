@@ -5,7 +5,7 @@
     <div class="card">
       <img src="../../assets/devops.jpg" alt="" class="img-fluid" />
       <div class="content">
-        <h4 class="header">{{ a.name }}</h4>
+        <h4 class="header"><router-link class="text-white" tag="a" :to="`/community/${a._id}`">{{ a.name }} </router-link></h4>
         <div class="foot">
           <img
             src="../../assets/bg.jpg"

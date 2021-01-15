@@ -5,6 +5,8 @@ import API from "../services/API"
 //Components
 import Main from "../components/Other/Main"
 import CreateCommunity from "../components/Other/CreateKommunity"
+import CommunityDetails from "../components/Other/CommunityDetails"
+
 
 Vue.use(VueRouter);
 
@@ -14,7 +16,8 @@ const routes = [
     { path: "/last-events", component: Main, name: "last-events" },
     { path: "/all-communities", component: Main, name: "all-communities" },
     { path: "/all-activites", component: Main, name: "all-activities" },
-    {path:"/create-community",component:CreateCommunity,name:"create-community"},
+    { path: "/create-community", component: CreateCommunity, name: "create-community" },
+    { path: "/community/:id", component: CommunityDetails, name: "community-details" }
 
     // {
     //     path: "/create", name: "createCommunity",
