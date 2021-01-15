@@ -27,7 +27,7 @@
           />
         </li>
         <li class="nav-item mr-2">
-          <button class="btn btn-success">Topluluk Oluştur</button>
+          <router-link tag="button" to="/create-community"  class="btn btn-success">Topluluk Oluştur</router-link>
         </li>
         <li class="nav-item d-flex" v-if="user != undefined">
           <div class="dropdown">
@@ -46,7 +46,9 @@
               <a class="dropdown-item" href="#">Profil</a>
               <a class="dropdown-item" href="#">Bildirimler</a>
               <a class="dropdown-item" href="#">Ayarlar</a>
-              <a @click.prevent="logoutApp" class="dropdown-item" href="#">Çıkış</a>
+              <a @click.prevent="logoutApp" class="dropdown-item" href="#"
+                >Çıkış</a
+              >
             </div>
           </div>
           <i class="far fa-bell mt-3"></i>
@@ -65,7 +67,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["getCommunitiesAction","logout"]),
+    ...mapActions(["getCommunitiesAction", "getActivitiesAction", "logout"]),
     ...mapMutations(["setUser", "setArray"]),
     login() {
       window.open(
@@ -86,10 +88,15 @@ export default {
 
     async clickAllCommunity() {
       await this.getCommunitiesAction();
+      this.$router.push({ name: "all-communities" });
     },
-    async logoutApp(){
+    async clickAllActivity() {
+      await this.getActivitiesAction();
+      this.$router.push({ name: "all-activities" });
+    },
+    async logoutApp() {
       await this.logout();
-    }
+    },
   },
   computed: {
     user() {

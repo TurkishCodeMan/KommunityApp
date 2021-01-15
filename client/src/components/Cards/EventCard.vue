@@ -1,5 +1,5 @@
 <template>
-  <div class="row mb-3">
+  <div class="col-md-12 mb-3">
     <div class="header mr-2">
       <div class="card w-100 ml-4 p-4">
         <div class="row">
@@ -9,18 +9,22 @@
             class="rounded-circle"
             width="60"
           />
-          <p class="font-weight-bold mr-2">{{ a.userID.name }}</p>
+          <p class="font-weight-bold mr-1">{{ a.userID.name }}</p>
           <div v-if="a.eventType == 'createCommunity'" class="d-flex">
-            <p class="text-muted mr-2">bir topluluk oluştur</p>
-            <p class="font-weight-bold mr-2">{{ a.community.name }}</p>
+            <p class="text-muted mr-1">bir topluluk oluşturdu</p>
+            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
           </div>
           <div v-if="a.eventType == 'createActivity'" class="d-flex">
-            <p class="text-muted mr-2">bir etkinliğe gidiyor</p>
-            <p class="font-weight-bold mr-2">{{ a.activity.name }}</p>
+            <p class="text-muted mr-1">bir etkinliğe gidiyor</p>
+            <p class="font-weight-bold mr-1">{{ a.activity.name }}</p>
           </div>
           <div v-if="a.eventType == 'subscribeCommunity'" class="d-flex">
-            <p class="text-muted mr-2">bir topluluğa katıldı</p>
-            <p class="font-weight-bold mr-2">{{ a.community.name }}</p>
+            <p class="text-muted mr-1">bir topluluğa katıldı</p>
+            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
+          </div>
+          <div v-if="a.eventType == 'unSubscribeCommunity'" class="d-flex">
+            <p class="text-muted mr-1">bir topluluktan ayrıldı</p>
+            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
           </div>
         </div>
       </div>

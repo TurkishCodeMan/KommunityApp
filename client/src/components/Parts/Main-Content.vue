@@ -35,6 +35,7 @@
           <app-card v-for="a in array" :key="a.index" :a="a"></app-card>
         </div>
         <div class="row" v-if="array[0].eventType != undefined">
+          
           <app-event-card
             v-for="a in array"
             :key="a.index"
@@ -68,6 +69,7 @@ export default {
     },
   },
   async created() {
+  
     this.getCommunitiesAction();
   },
 };

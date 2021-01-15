@@ -23,7 +23,7 @@
             <button v-if="a.participants" class="btn btn-warning btn-sm">
             Etkinliğe git
           </button>
-          <button v-if="!a.participants && memberrControl" class="btn btn-secondary btn-sm">
+          <button @click.prevent="unSubscribeCommunity(a._id)" v-if="!a.participants && memberrControl" class="btn btn-secondary btn-sm">
             Ayrıl
           </button>
         </div>
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["subscribeCommunity"]),
+    ...mapActions(["subscribeCommunity","unSubscribeCommunityAction"]),
     memberControl() {
       if (this.a.members) {
         this.a.members.forEach((element) => {
@@ -55,6 +55,9 @@ export default {
     },
     async subscribeACommunity(communityID){
       await this.subscribeCommunity(communityID);
+    },
+    async unSubscribeCommunity(communityID){
+      await this.unSubscribeCommunityAction(communityID);
     }
   },
 

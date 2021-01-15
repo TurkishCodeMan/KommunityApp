@@ -5,7 +5,8 @@ const eventSchema = mongoose.Schema({
     userID:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
     community: { type: Object },
     activity: { type: Object },
-    eventType:{type:String}
+    eventType:{type:String},
+    createdAt:{type:Date,default:Date.now}
 })
 
 module.exports = mongoose.model("Event", eventSchema);

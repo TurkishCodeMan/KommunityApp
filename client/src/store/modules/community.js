@@ -1,8 +1,10 @@
+
 import API from "../../services/API"
 
 const state = {
     array: undefined,
-    advicePeople: undefined
+    advicePeople: undefined,
+
 }
 const getters = {
     getAdvicePeople(state) {
@@ -27,9 +29,9 @@ const actions = {
         try {
             const data = await API().get("/");
             commit("setArray", data.data);
-            if(data.data.length<=0){
-                commit("setArray",["all-communities"])
-             }
+            if (data.data.length <= 0) {
+                commit("setArray", ["all-communities"])
+            }
         } catch (error) {
             return error.message;
         }
@@ -38,20 +40,22 @@ const actions = {
         try {
             const data = await API().get("/all-activity");
             commit("setArray", data.data);
-            if(data.data.length<=0){
-                commit("setArray",["all-activity"])
-             }
+            if (data.data.length <= 0) {
+                commit("setArray", ["all-activity"])
+            }
         } catch (error) {
             return error.message;
         }
     },
-    async getUserEvents({commit}){
+    async getUserEvents({ commit }) {
         try {
             const data = await API().get("/user-events");
-            commit("setArray", data.data);
-           if(data.data.length<=0){
-              commit("setArray",["user-events"])
-           }
+
+            let array = data.data.reverse();
+            commit("setArray", array);
+            if (data.data.length <= 0) {
+                commit("setArray", ["user-events"])
+            }
         } catch (error) {
             return error.message;
         }
@@ -65,27 +69,50 @@ const actions = {
             return error.message;
         }
     },
-    async myCommunities({commit}){
+    async myCommunities({ commit }) {
         try {
             const data = await API().get("/my-communities");
             commit("setArray", data.data);
-            if(data.data.length<=0){
-                commit("setArray",["my-communities"])
-             }
+            if (data.data.length <= 0) {
+                commit("setArray", ["my-communities"])
+            }
         } catch (error) {
             return error.message;
         }
     },
-    async subscribeCommunity({dispatch},communityID){
+    async subscribeCommunity({ dispatch }, communityID) {
         try {
-            const data=await API().get("/subscribe-community/"+communityID)
-        
+            const data = await API().get("/subscribe-community/" + communityID)
+            dispatch("myCommunities")
         } catch (error) {
             return error.message;
 
         }
+    },
+    async unSubscribeCommunityAction({ dispatch }, communityID) {
+        try {
+            const data = await API().get("/unsubscribe-community/" + communityID)
+            dispatch("myCommunities")
+        } catch (error) {
+            return error.message;
+
+        }
+    },
+    async createCommunity({ dispatch }, community) {
+        try {
+            const data = await API().post("/create-community", community);
+            console.log(data);
+            dispatch("getCommunitiesAction")
+        } catch (error) {
+            return error.message;
+        }
+
     }
 }
+
+
+
+
 export default {
     state,
     getters,
