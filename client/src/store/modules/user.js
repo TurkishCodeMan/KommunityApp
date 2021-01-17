@@ -18,8 +18,14 @@ const mutations = {
 const actions = {
     async logout({ commit }) {
         const response = await API().get("/logout");
-        if (response.data.logout) 7
-        commit("setUser", undefined)
+        if (response.data.logout) {
+            commit("setUser", undefined)
+    
+            commit("setAdvicePeople",undefined);
+            commit("setArray",undefined)
+        }
+       
+
     }
 }
 

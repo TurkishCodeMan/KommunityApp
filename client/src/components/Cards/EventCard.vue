@@ -12,7 +12,15 @@
           <p class="font-weight-bold mr-1">{{ a.userID.name }}</p>
           <div v-if="a.eventType == 'createCommunity'" class="d-flex">
             <p class="text-muted mr-1">bir topluluk oluşturdu</p>
-            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
+            <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
+          </div>
+          <div v-if="a.eventType == 'followingUser'" class="d-flex">
+            <p class="text-muted mr-1">bir kişiyi takip etti</p>
+            <p class="font-weight-bold mr-1">
+              <a href="" class="text-dark follow-user">{{
+                a.eventObject.name
+              }}</a>
+            </p>
           </div>
           <div v-if="a.eventType == 'createActivity'" class="d-flex">
             <p class="text-muted mr-1">bir etkinliğe gidiyor</p>
@@ -20,11 +28,11 @@
           </div>
           <div v-if="a.eventType == 'subscribeCommunity'" class="d-flex">
             <p class="text-muted mr-1">bir topluluğa katıldı</p>
-            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
+            <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
           </div>
           <div v-if="a.eventType == 'unSubscribeCommunity'" class="d-flex">
             <p class="text-muted mr-1">bir topluluktan ayrıldı</p>
-            <p class="font-weight-bold mr-1">{{ a.community.name }}</p>
+            <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
           </div>
         </div>
       </div>

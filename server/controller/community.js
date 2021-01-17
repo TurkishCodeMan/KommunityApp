@@ -5,6 +5,8 @@ const Event = require("../models/Event");
 const publish = require("../config/publisher");
 
 
+
+
 const getAllUser = async (req, res, next) => {
     try {
         const Users = await User.find();
@@ -125,7 +127,7 @@ const unSubscribeCommunity = async (req, res, next) => {
         const community = await Community.findOne({ _id: req.params.id });
 
         community.members.pop(req.user._id)
-    
+
         await community.save();
         const user = await User.findOne({ _id: req.user._id });
         user.members.pop(req.user._id)
@@ -153,9 +155,44 @@ const getRandomUser = async (req, res, next) => {
         var random = Math.floor(Math.random() * 10)
         random = 0;
         const users = await User.find().skip(random).exec();
-        return res.json(users)
+
+        //FollowControl
+
+        let _users = [];
+        users.map(user => {
+         
+            if (req.user && req.user.following.length > 0) {
+                req.user.following.forEach(id => {
+                    if (id.toString() === user._id.toString()) {
+                        _users.push({
+                            _id:user._id,
+                            name: user.name,
+                            imageUrl: user.imageUrl,
+                            googleID: user.googleID,
+                            tag: user.tag,
+                            follow: true,
+                        })
+                    }
+                })
+            } else {
+             
+                    _users.push({
+                        _id:user._id,
+                        name: user.name,
+                        imageUrl: user.imageUrl,
+                        googleID: user.googleID,
+                        tag: user.tag,
+                        follow: false,
+                    })
+                
+               
+            }
+
+        })
+
+        return res.json(_users)
     } catch (error) {
-        return res.json({ message: "Server Error" + error.message })
+        return res.json({ message: "Server Errorr" + error.message })
     }
 }
 
@@ -164,9 +201,26 @@ const getRandomUser = async (req, res, next) => {
 const getUserEvents = async (req, res, next) => {
     try {
 
-        let events = await Event.find({ userID: req.user._id }).populate({ path: 'userID' }).exec();
 
-        return res.json(events)
+
+
+        let followEvents = [];
+        //Takipçilerinin eventleri
+        req.user.following.forEach(async userID => {
+            followEvents = await Event.find({ userID: userID }).populate({ path: 'userID' }).exec();
+
+        });
+        //Kendi Eventleri
+        let myEvents = await Event.find({ userID: req.user._id }).populate({ path: 'userID' }).exec();;
+
+
+
+        let allEvents = followEvents.concat(myEvents);
+
+        return res.json(allEvents);
+
+
+
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
     }
@@ -183,6 +237,23 @@ const getMyCommunities = async (req, res, next) => {
     }
 }
 
+const getFollowingUser = async (req, res, next) => {
+    try {
+        const followingUserID = req.params.id;
+       
+        let response = await req.user.followingUser(followingUserID)
+        let user = await User.findOne({ _id: followingUserID });
+
+        //Takip Etti Eventini DB ye atıyoruz
+        publish("events", req.user, "followingUser", user);
+        return res.json(response)
+    } catch (error) {
+        return res.json({ message: "Server Errorr" + error.message })
+
+    }
+}
+
+
 
 module.exports = {
     getAllUser,
@@ -197,6 +268,7 @@ module.exports = {
     getRandomUser,
     getUserEvents,
     getMyCommunities,
-    unSubscribeCommunity
+    unSubscribeCommunity,
+    getFollowingUser
 
 }

@@ -67,7 +67,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["getCommunitiesAction", "getActivitiesAction", "logout"]),
+    ...mapActions(["getCommunitiesAction", "getActivitiesAction", "logout","getAdvicePeopleAction"]),
     ...mapMutations(["setUser", "setArray"]),
     login() {
       window.open(
@@ -77,12 +77,14 @@ export default {
       );
       window.addEventListener("message", this.myCallBack);
     },
-    myCallBack(message) {
+    async myCallBack(message) {
       if (message.data.user) {
         console.log(message.data);
         this.setUser(message.data.user);
         window.removeEventListener("message", this.myCallBack);
+        await this.getAdvicePeopleAction();
         this.$router.push({ name: "home" });
+
       }
     },
 

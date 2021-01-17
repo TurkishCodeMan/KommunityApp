@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const eventSchema = mongoose.Schema({
     userID:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
-    community: { type: Object },
+    eventObject: { type: Object },
     activity: { type: Object },
     eventType:{type:String},
     createdAt:{type:Date,default:Date.now}

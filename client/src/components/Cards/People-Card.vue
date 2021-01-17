@@ -1,35 +1,53 @@
 <template>
-  <div class="container mb-3" v-if="people._id!=user._id">
+  <div class="container mb-3" v-if="people._id != user._id">
     <div class="user-image">
+ 
+    
       <img
         class="img-fluid img-thumbnail rounded-circle"
         :src="people.imageUrl"
         alt="People Image"
-    
       />
     </div>
     <div class="content-info">
-      <a class="header" href="#">{{people.name}}</a>
-      <p class="nickname">@{{people.tag}}</p>
+      <a class="header" href="#">{{ people.name }}</a>
+      <p class="nickname">@{{ people.tag }}</p>
     </div>
     <div class="subscribe">
-      <button class="btn btn-secondary btn-sm">Takip Et</button>
+
+      <button
+        class="btn btn-secondary btn-sm"
+        v-if="!people.follow"
+        @click="followUser"
+      >
+        Takip Et
+      </button>
+      <button class="btn btn-success btn-sm" v-if="people.follow" @click="followUser">
+        Takip Ediliyor
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  props:{people:{type:Object}},
-  methods:{
-    ...mapGetters(["getUser"])
+
+  props: { people: { type: Object } },
+  methods: {
+    ...mapGetters(["getUser"]),
+    ...mapActions(["getFollowingUser"]),
+    async followUser() {
+      await this.getFollowingUser(this.people._id);
+     
+    },
+
   },
-  computed:{
-    user(){
+  computed: {
+    user() {
       return this.getUser();
-    }
-  }
+    },
+  },
 
 };
 </script>
@@ -40,9 +58,9 @@ export default {
   align-items: center;
   box-shadow: 1px 1px 2px 2px rgb(224, 222, 222);
 }
-.header{
-    color:#5A5D5F;
-    text-decoration: none;
+.header {
+  color: #5a5d5f;
+  text-decoration: none;
 }
 .user-image {
   flex: 1;

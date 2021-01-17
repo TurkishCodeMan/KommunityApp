@@ -4,20 +4,21 @@
       <h4 v-if="array[0].name" class="float-left">Son Aktiviteler</h4>
       <p class="font-weight-bold">Henüz bir etkileşim gerçekleştirmediniz</p>
     </div>
-     <div class="control2" v-if="array[0] == 'all-activity'">
+    <div class="control2" v-if="array[0] == 'all-activity'">
       <p class="font-weight-bold">Bir Aktivite Yok</p>
     </div>
-     <div class="control2" v-else-if="array[0] == 'all-communities'">
-
+    <div class="control2" v-else-if="array[0] == 'all-communities'">
       <p class="font-weight-bold">Bir Topluluk Bulunamadı</p>
     </div>
-      <div class="control2" v-if="array[0] == 'my-communities'">
+    <div class="control2" v-if="array[0] == 'my-communities'">
       <p class="font-weight-bold">Bir Topluluğunuz Yok</p>
     </div>
 
     <div class="control" v-else>
       <div class="search">
-        <h5 v-if="array[0].eventType == undefined && typeof array[0]!='string'">
+        <h5
+          v-if="array[0].eventType == undefined && typeof array[0] != 'string'"
+        >
           <select id="" class="select">
             <option value="1">Malatya</option>
           </select>
@@ -48,13 +49,30 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import Card from "../Cards/Card";
 import EventCard from "../Cards/EventCard";
 export default {
-  data() {
-    return {};
-  },
+  // data() {
+  //   return {
+  //     data: undefined,
+  //     followingEvents: data[0],
+  //     myEvents: data[1],
+  //   };
+  // },
+  // methods: {
+  //   ...mapGetters(["getArray"]),
+  //   ...mapMutations(["setArray"]),
+  // },
+  // sockets: {
+  //   events(data) {
+  //     console.log(data);
+  //     this.data = data;
+  //     this.$store.commit("setArray", data[0]);
+  //     console.log(this.getArray());
+  //   },
+  // },
+
   components: {
     appCard: Card,
     appEventCard: EventCard,
@@ -69,8 +87,7 @@ export default {
     },
   },
   async created() {
-  
-    this.getCommunitiesAction();
+    await this.getCommunitiesAction();
   },
 };
 </script>

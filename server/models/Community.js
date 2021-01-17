@@ -22,11 +22,11 @@ const communitySchema = mongoose.Schema({
       ref: 'Activity',
     },
   ],
-  type:{type:Boolean,default:false},
-  comments:[
+  type: { type: Boolean, default: false },
+  comments: [
     {
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Comment",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
     }
   ]
 });

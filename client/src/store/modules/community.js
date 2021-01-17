@@ -33,10 +33,11 @@ const mutations = {
 }
 
 const actions = {
-    async getCommunitiesAction({ commit }) {
+    async getCommunitiesAction({ commit,dispatch }) {
         try {
             const data = await API().get("/");
             commit("setArray", data.data);
+    
             if (data.data.length <= 0) {
                 commit("setArray", ["all-communities"])
             }
@@ -56,8 +57,9 @@ const actions = {
         }
     },
     async getUserEvents({ commit }) {
+        console.log("Burada")
         try {
-            const data = await API().get("/user-events");
+            const data = await API().get("/last-events");
 
             let array = data.data.reverse();
             commit("setArray", array);
@@ -124,7 +126,18 @@ const actions = {
         } catch (error) {
             return error.message;
         }
+    },
+    async getFollowingUser({dispatch},id){
+        try {
+            const data = await API().get("/following-user/" + id)
+           console.log(data.data);
+           dispatch("getUserEvents");
+           dispatch("getAdvicePeopleAction")
+        } catch (error) {
+            return error.message;
+        }
     }
+
 }
 
 

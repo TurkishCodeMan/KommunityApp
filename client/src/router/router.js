@@ -35,6 +35,12 @@ router.beforeEach(async (to, from, next) => {
     //Her istekte User Kontrol
     let res = await API().get("/session")
 
+    //Her istekte Event Toplama
+
+    if (to.name == 'last-events') {
+        console.log("last-events")
+    }
+
     store.commit("setUser", res.data.user);
     next();
 

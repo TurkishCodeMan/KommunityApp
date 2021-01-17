@@ -8,7 +8,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated")
 //Yardımcı Rotalar
 router.get("/random-user", communityController.getRandomUser)
 
-router.get("/user-events", communityController.getUserEvents);
+router.get("/last-events", communityController.getUserEvents);
 
 
 // All-User
@@ -43,6 +43,9 @@ router.get('/subscribe-activity/:id', communityController.subscribeActivity);
 
 // Create A Activity
 router.post('/create-activity/:id', communityController.createActivity);
+
+//Following A User
+router.get("/following-user/:id",communityController.getFollowingUser);
 
 
 

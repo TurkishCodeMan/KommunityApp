@@ -28,4 +28,24 @@ const userSchema = mongoose.Schema({
   ]
 });
 
-module.exports = mongoose.model('User', userSchema);
+userSchema.methods.followingUser = async function (followingUserID) {
+
+
+
+  let index = this.following.findIndex(item => {
+    return item.toString() === followingUserID.toString();
+  })
+
+  if (index >= 0) {
+    return 'Zaten Takip Ettikleriniz Arasında'
+  } else {
+    this.following.push(followingUserID);
+    return this.save();
+  }
+
+
+
+}
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;

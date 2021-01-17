@@ -24,7 +24,6 @@
       <i class="fas fa-ticket-alt"></i>
       <a class="nav-link" href="">Biletlerim</a>
     </li>
-  
   </ul>
 </template>
 
@@ -38,7 +37,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getActivitiesAction", "getUserEvents", "myCommunities"]),
+    ...mapActions([
+      "getActivitiesAction",
+      "getUserEvents",
+      "myCommunities",
+      "getAdvicePeopleAction",
+    ]),
     ...mapMutations(["setArray"]),
     ...mapGetters(["getUser", "getArray"]),
     async clickDiscover(e) {
@@ -93,7 +97,9 @@ export default {
     },
   },
 
-
+  async mounted() {
+    await this.getAdvicePeopleAction();
+  },
 };
 </script>
 
