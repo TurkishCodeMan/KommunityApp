@@ -7,7 +7,11 @@
           <img
             class="img-fluid rounded"
             width="100"
-            :src="require(`../../../../server/uploads/${community.imageUrl}`)"
+            :src="
+              community.imageUrl != undefined
+                ? require(`../../../../server/uploads/${community.imageUrl}`)
+                : require('../../assets/devops.jpg')
+            "
             alt=""
           />
         </div>
@@ -34,7 +38,13 @@
           </div>
         </div>
         <div class="davet">
-          <button class="btn btn-info">Davet Et</button>
+          <button
+            class="btn btn-info"
+            :class="checkResult == 'Ayrıl' ? 'btn btn-warning' : ''"
+            @click="clickButton"
+          >
+            {{ checkResult }}
+          </button>
         </div>
       </div>
     </div>
@@ -63,7 +73,9 @@
               <h4 class="float-left mb-4">Topluluk Hakkında</h4>
               <img
                 :src="
-                  require(`../../../../server/uploads/${community.imageUrl}`)
+                  community.imageUrl != undefined
+                    ? require(`../../../../server/uploads/${community.imageUrl}`)
+                    : require('../../assets/devops.jpg')
                 "
                 class="img-fluid rounded mb-3"
                 :alt="'./' + community.imageUrl"
@@ -151,14 +163,51 @@ import RightMenu from "../SubParts/CommunityDetails/RightMenu";
 
 import { mapActions, mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      checkResult: "",
+    };
+  },
   methods: {
-    ...mapActions(["getCommunityById"]),
-    ...mapGetters(["getCommunity"]),
+    ...mapActions([
+      "getCommunityById",
+      "unSubscribeCommunityAction",
+      "subscribeCommunity",
+    ]),
+    ...mapGetters(["getCommunity", "getUser"]),
+    async checkMember() {
+      console.log("Burada");
+      if (this.community.members != undefined) {
+        if (this.community.members.length > 0) {
+          this.community.members.forEach((member) => {
+            if (this.user._id.toString() === member._id.toString()) {
+              return (this.checkResult = "Ayrıl");
+            } else {
+              return (this.checkResult = "Katıl");
+            }
+          });
+        }
+      } else {
+        return (this.checkResult = "Katıl");
+      }
+    },
+    async clickButton() {
+      if (this.checkResult == "Ayrıl") {
+        await this.unSubscribeCommunityAction(this.community._id);
+        await this.checkMember();
+      } else {
+        await this.subscribeCommunity(this.community._id);
+        await this.checkMember();
+      }
+    },
   },
 
   computed: {
     community() {
       return this.getCommunity();
+    },
+    user() {
+      return this.getUser();
     },
   },
   components: {
@@ -166,6 +215,8 @@ export default {
     appHeader: Header,
   },
   async mounted() {
+    await this.checkMember();
+    console.log("mounted");
     await this.getCommunityById(this.$route.params.id);
   },
 };

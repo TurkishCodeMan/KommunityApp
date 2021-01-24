@@ -121,4 +121,7 @@ p {
     font-size: 0.9rem;
     margin-right: 5px;
 }
+.events {
+  overflow: visible;
+}
 </style>

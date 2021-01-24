@@ -102,7 +102,8 @@ const actions = {
         try {
             const data = await API().get("/subscribe-community/" + communityID)
             console.log(data)
-            dispatch("myCommunities")
+            dispatch("myCommunities");
+            dispatch('getCommunityById',communityID)
         } catch (error) {
             return error.message;
 
@@ -112,10 +113,12 @@ const actions = {
         try {
             const data = await API().get("/unsubscribe-community/" + communityID)
             dispatch("myCommunities")
+            dispatch('getCommunityById',communityID)
         } catch (error) {
             return error.message;
 
         }
+     
     },
     async createCommunity({ dispatch }, community) {
         try {
