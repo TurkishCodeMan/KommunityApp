@@ -40,10 +40,10 @@
         <div class="davet">
           <button
             class="btn btn-info"
-            :class="checkResult == 'Ayrıl' ? 'btn btn-warning' : ''"
+            :class="community.subscribe==true ? 'btn btn-warning' : ''"
             @click="clickButton"
           >
-            {{ checkResult }}
+            {{ community.subscribe==true ? "Ayrıl" : "Katıl" }}
           </button>
         </div>
       </div>
@@ -163,11 +163,7 @@ import RightMenu from "../SubParts/CommunityDetails/RightMenu";
 
 import { mapActions, mapGetters } from "vuex";
 export default {
-  data() {
-    return {
-      checkResult: "",
-    };
-  },
+
   methods: {
     ...mapActions([
       "getCommunityById",
@@ -175,29 +171,12 @@ export default {
       "subscribeCommunity",
     ]),
     ...mapGetters(["getCommunity", "getUser"]),
-    async checkMember() {
-      console.log("Burada");
-      if (this.community.members != undefined) {
-        if (this.community.members.length > 0) {
-          this.community.members.forEach((member) => {
-            if (this.user._id.toString() === member._id.toString()) {
-              return (this.checkResult = "Ayrıl");
-            } else {
-              return (this.checkResult = "Katıl");
-            }
-          });
-        }
-      } else {
-        return (this.checkResult = "Katıl");
-      }
-    },
+
     async clickButton() {
-      if (this.checkResult == "Ayrıl") {
+      if (this.community.subscribe) {
         await this.unSubscribeCommunityAction(this.community._id);
-        await this.checkMember();
       } else {
         await this.subscribeCommunity(this.community._id);
-        await this.checkMember();
       }
     },
   },
@@ -215,8 +194,6 @@ export default {
     appHeader: Header,
   },
   async mounted() {
-    await this.checkMember();
-    console.log("mounted");
     await this.getCommunityById(this.$route.params.id);
   },
 };

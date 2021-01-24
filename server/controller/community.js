@@ -50,25 +50,46 @@ const getCommunityById = async (req, res, next) => {
     try {
         let communityID = req.params.id;
         const community = await Community.findOne({ _id: communityID })
-        .populate({ //Dizi içindeki attrübütüde populate ettik
-            path: "activities",
-            populate: {
-                path: 'organizer',
-                models: 'Community'
-            },
-        }).populate({   //Direk dizi içindeki elemanın attributlerine ulaştık
-            path:'organizators',
-            select:'name imageUrl'
-        }).populate({
-            path:'members',
-            select:'name imageUrl'
-        });
+            .populate({ //Dizi içindeki attrübütüde populate ettik
+                path: "activities",
+                populate: {
+                    path: 'organizer',
+                    models: 'Community'
+                },
+            }).populate({   //Direk dizi içindeki elemanın attributlerine ulaştık
+                path: 'organizators',
+                select: 'name imageUrl'
+            }).populate({
+                path: 'members',
+                select: 'name imageUrl'
+            });
 
+        let user=await User.findOne({_id:req.user._id});
+
+     
+        //Aktif User Takıp Ediormu O Kommunityi
+        user.members.forEach(c=>{
+            if(c._id.toString()==community._id.toString()){
+                _community={
+                    ...community._doc,
+                    subscribe:true,
+                }
+            }else{
+                _community={
+                    ...community._doc,
+                    subscribe:false,
+                }
+            }
+        })
+
+        console.log(user.members)
+    
         //Kommunity ilgili tüm eventleri çekelim
         let events = await community.getAllEvents();
-
+    
+        
         //JOİN
-        return res.json({community,events});
+        return res.json({ community:_community, events });
     } catch (error) {
         return res.json({ message: "Server Error" + error.message })
 
@@ -88,27 +109,27 @@ const getUserById = async (req, res, next) => {
 
 const createCommunity = async (req, res, next) => {
     console.log(req.file)
-   
+
     try {
-     
+
         console.log(req.body.name)
-  
+
         let community = new Community({
             name: req.body.name,
             location: req.body.location,
             description: req.body.description,
             privating: req.body.private,
             category: req.body.catID,
-            imageUrl:req.file.filename,
+            imageUrl: req.file.filename,
         })
-    
+
         await community.save();
         community.organizators.push(req.user._id)
         community.members.push(req.user._id);
         await community.save();
-     
+
         const user = await User.findOne({ _id: req.user._id });
-        
+
         user.members.push(community._id);
 
         publish("events", req.user, "createCommunity", community)
@@ -152,9 +173,9 @@ const subscribeCommunity = async (req, res, next) => {
         const community = await Community.findOne({ _id: req.params.id });
         community.members.push(req.user._id);
         await community.save();
-     
+
         const user = await User.findOne({ _id: req.user._id });
-        
+
         user.members.push(community._id);
         console.log(user._id)
         console.log(user.members)
@@ -176,6 +197,7 @@ const unSubscribeCommunity = async (req, res, next) => {
         await community.save();
         const user = await User.findOne({ _id: req.user._id });
         user.members.pop(req.user._id)
+        console.log(user.members);
         await user.save();
         publish("events", req.user, "unSubscribeCommunity", community)
         return res.json(community);
