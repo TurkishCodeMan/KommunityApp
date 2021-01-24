@@ -26,7 +26,29 @@ const actions = {
         }
        
 
+    },
+    async getFollowingUser({ dispatch }, id) {
+        try {
+            const data = await API().get("/following-user/" + id)
+            console.log(data.data);
+            dispatch("getUserEvents");
+            dispatch("getAdvicePeopleAction")
+        } catch (error) {
+            return error.message;
+        }
+    },
+    async unFollowingUser({ dispatch }, id) {
+        try {
+            const data = await API().get("/unfollowing-user/" + id)
+            console.log(data.data);
+            dispatch("getUserEvents");
+            dispatch("getAdvicePeopleAction")
+        } catch (error) {
+            return error.message;
+        }
     }
+
+
 }
 
 export default {

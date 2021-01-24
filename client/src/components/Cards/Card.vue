@@ -3,9 +3,22 @@
     :class="a.participants ? 'col-md-12 mb-3 card-container' : 'col-md-6 mb-3'"
   >
     <div class="card">
-      <img src="../../assets/devops.jpg" alt="" class="img-fluid" />
+      <img
+        :src="
+          a.imageUrl
+            ? require(`../../../../server/uploads/${a.imageUrl}`)
+            : require('../../assets/devops.jpg')
+        "
+        alt=""
+        class="img-fluid"
+      />
+
       <div class="content">
-        <h4 class="header"><router-link class="text-white" tag="a" :to="`/community/${a._id}`">{{ a.name }} </router-link></h4>
+        <h4 class="header">
+          <router-link class="text-white" tag="a" :to="`/community/${a._id}`"
+            >{{ a.name }}
+          </router-link>
+        </h4>
         <div class="foot">
           <img
             src="../../assets/bg.jpg"
@@ -17,13 +30,21 @@
           <h6 v-if="a.participants" class="member">
             {{ a.participants.length }} Katılımcı
           </h6>
-          <button @click.prevent="subscribeACommunity(a._id)" v-if="!memberrControl && a.members" class="btn btn-warning btn-sm">
+          <button
+            @click.prevent="subscribeACommunity(a._id)"
+            v-if="!memberrControl && a.members"
+            class="btn btn-warning btn-sm"
+          >
             Katıl
           </button>
-            <button v-if="a.participants" class="btn btn-warning btn-sm">
+          <button v-if="a.participants" class="btn btn-warning btn-sm">
             Etkinliğe git
           </button>
-          <button @click.prevent="unSubscribeCommunity(a._id)" v-if="!a.participants && memberrControl" class="btn btn-secondary btn-sm">
+          <button
+            @click.prevent="unSubscribeCommunity(a._id)"
+            v-if="!a.participants && memberrControl"
+            class="btn btn-secondary btn-sm"
+          >
             Ayrıl
           </button>
         </div>
@@ -43,7 +64,7 @@ export default {
   },
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["subscribeCommunity","unSubscribeCommunityAction"]),
+    ...mapActions(["subscribeCommunity", "unSubscribeCommunityAction"]),
     memberControl() {
       if (this.a.members) {
         this.a.members.forEach((element) => {
@@ -53,12 +74,12 @@ export default {
         });
       }
     },
-    async subscribeACommunity(communityID){
+    async subscribeACommunity(communityID) {
       await this.subscribeCommunity(communityID);
     },
-    async unSubscribeCommunity(communityID){
+    async unSubscribeCommunity(communityID) {
       await this.unSubscribeCommunityAction(communityID);
-    }
+    },
   },
 
   async created() {

@@ -81,7 +81,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["createCommunity"]),
+    ...mapActions(["createCommunity","getCategoriesAction"]),
     async createCom() {
       if (Object.keys(this.community).length > 0) {
         await this.createCommunity(this.community);
@@ -94,6 +94,10 @@ export default {
     appDefault: Default,
     appAciklama: Aciklama,
   },
+
+  async mounted(){
+    await this.getCategoriesAction();
+  }
 };
 </script>
 

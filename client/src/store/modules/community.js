@@ -1,11 +1,13 @@
 
-
 import API from "../../services/API"
 
 const state = {
     array: undefined,
     advicePeople: undefined,
-    community:undefined
+    community: {
+        events: {}
+    },
+    categories: undefined
 
 }
 const getters = {
@@ -15,8 +17,11 @@ const getters = {
     getArray(state) {
         return state.array
     },
-    getCommunity(state){
+    getCommunity(state) {
         return state.community;
+    },
+    getCategories(state) {
+        return state.categories
     }
 }
 
@@ -27,17 +32,20 @@ const mutations = {
     setArray(state, value) {
         state.array = value;
     },
-    setCommunity(state,value){
-        state.community=value;
+    setCommunity(state, value) {
+        state.community = value;
+    },
+    setCategories(state, value) {
+        state.categories = value
     }
 }
 
 const actions = {
-    async getCommunitiesAction({ commit,dispatch }) {
+    async getCommunitiesAction({ commit, dispatch }) {
         try {
             const data = await API().get("/");
             commit("setArray", data.data);
-    
+
             if (data.data.length <= 0) {
                 commit("setArray", ["all-communities"])
             }
@@ -93,6 +101,7 @@ const actions = {
     async subscribeCommunity({ dispatch }, communityID) {
         try {
             const data = await API().get("/subscribe-community/" + communityID)
+            console.log(data)
             dispatch("myCommunities")
         } catch (error) {
             return error.message;
@@ -110,7 +119,14 @@ const actions = {
     },
     async createCommunity({ dispatch }, community) {
         try {
-            const data = await API().post("/create-community", community);
+            let formData=new FormData();
+            formData.append('myfile',community.image);
+            formData.append("name",community.name);
+            formData.append('location',community.location);
+            formData.append('catID',community.catID);
+            formData.append('private',community.private);
+            formData.append('description',community.description);
+            const data = await API().post("/create-community", formData);
             console.log(data);
             dispatch("getCommunitiesAction")
         } catch (error) {
@@ -118,21 +134,21 @@ const actions = {
         }
 
     },
-    async getCommunityById({ commit }, id) {
+    async getCommunityById({ commit, state }, id) {
         try {
             const data = await API().get("/community/" + id)
-            console.log(data.data);
-            commit("setCommunity",data.data)
+            console.log(data.data.community);
+            commit("setCommunity", data.data.community);
+            state.community.events = data.data.events;
         } catch (error) {
             return error.message;
         }
     },
-    async getFollowingUser({dispatch},id){
+    async getCategoriesAction({ commit }, id) {
         try {
-            const data = await API().get("/following-user/" + id)
-           console.log(data.data);
-           dispatch("getUserEvents");
-           dispatch("getAdvicePeopleAction")
+            const data = await API().get("/all-categories")
+            console.log(data.data);
+            commit("setCategories", data.data)
         } catch (error) {
             return error.message;
         }

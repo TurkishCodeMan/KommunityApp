@@ -43,7 +43,13 @@ userSchema.methods.followingUser = async function (followingUserID) {
     return this.save();
   }
 
-
+}
+userSchema.methods.unFollowingUser = async function (unFollowingUserID) {
+  let array = this.following.filter(item => {
+    return item.toString() !== unFollowingUserID.toString();
+  })
+  this.following = array;
+  return this.save();
 
 }
 const User = mongoose.model('User', userSchema);

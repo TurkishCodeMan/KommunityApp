@@ -22,7 +22,7 @@
       >
         Takip Et
       </button>
-      <button class="btn btn-success btn-sm" v-if="people.follow" @click="followUser">
+      <button class="btn btn-success btn-sm" v-if="people.follow" @click="unFollowUser">
         Takip Ediliyor
       </button>
     </div>
@@ -36,11 +36,14 @@ export default {
   props: { people: { type: Object } },
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["getFollowingUser"]),
+    ...mapActions(["getFollowingUser","unFollowingUser"]),
     async followUser() {
       await this.getFollowingUser(this.people._id);
      
     },
+    async unFollowUser(){
+      await this.unFollowingUser(this.people._id);
+    }
 
   },
   computed: {

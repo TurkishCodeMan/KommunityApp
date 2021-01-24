@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="array">
     <div class="control2" v-if="array[0] == 'user-events'">
       <h4 v-if="array[0].name" class="float-left">Son Aktiviteler</h4>
       <p class="font-weight-bold">Henüz bir etkileşim gerçekleştirmediniz</p>
@@ -15,7 +15,7 @@
     </div>
 
     <div class="control" v-else>
-      <div class="search">
+      <div class="search" v-if="array.length>0">
         <h5
           v-if="array[0].eventType == undefined && typeof array[0] != 'string'"
         >
@@ -49,29 +49,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Card from "../Cards/Card";
 import EventCard from "../Cards/EventCard";
 export default {
-  // data() {
-  //   return {
-  //     data: undefined,
-  //     followingEvents: data[0],
-  //     myEvents: data[1],
-  //   };
-  // },
-  // methods: {
-  //   ...mapGetters(["getArray"]),
-  //   ...mapMutations(["setArray"]),
-  // },
-  // sockets: {
-  //   events(data) {
-  //     console.log(data);
-  //     this.data = data;
-  //     this.$store.commit("setArray", data[0]);
-  //     console.log(this.getArray());
-  //   },
-  // },
 
   components: {
     appCard: Card,

@@ -9,28 +9,36 @@
             class="rounded-circle"
             width="60"
           />
-          <p class="font-weight-bold mr-1">{{ a.userID.name }}</p>
-          <div v-if="a.eventType == 'createCommunity'" class="d-flex">
+          <p v-if="a.userID.name" class="font-weight-bold mr-1">{{ a.userID.name }}</p>
+          <div v-if="a.eventType == 'createCommunity' && a.eventObject.name" class="d-flex">
             <p class="text-muted mr-1">bir topluluk oluşturdu</p>
-            <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
+            <p v-if="a.eventObject.name"  class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
           </div>
-          <div v-if="a.eventType == 'followingUser'" class="d-flex">
+          <div v-if="a.eventType == 'followingUser' && a.eventObject.name" class="d-flex">
             <p class="text-muted mr-1">bir kişiyi takip etti</p>
             <p class="font-weight-bold mr-1">
-              <a href="" class="text-dark follow-user">{{
+              <a v-if="a.eventObject.name"  href="" class="text-dark follow-user">{{
                 a.eventObject.name
               }}</a>
             </p>
           </div>
-          <div v-if="a.eventType == 'createActivity'" class="d-flex">
+             <div v-if="a.eventType == 'unFollowingUser'&& a.eventObject.name" class="d-flex">
+            <p class="text-muted mr-1">bir kişiyi takipten çıktı</p>
+            <p class="font-weight-bold mr-1">
+              <a v-if="a.eventObject.name" href="" class="text-dark follow-user">{{
+                a.eventObject.name
+              }}</a>
+            </p>
+          </div>
+          <div v-if="a.eventType == 'createActivity'&& a.activity.name" class="d-flex">
             <p class="text-muted mr-1">bir etkinliğe gidiyor</p>
             <p class="font-weight-bold mr-1">{{ a.activity.name }}</p>
           </div>
-          <div v-if="a.eventType == 'subscribeCommunity'" class="d-flex">
+          <div v-if="a.eventType == 'subscribeCommunity'&& a.eventObject.name" class="d-flex">
             <p class="text-muted mr-1">bir topluluğa katıldı</p>
             <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
           </div>
-          <div v-if="a.eventType == 'unSubscribeCommunity'" class="d-flex">
+          <div v-if="a.eventType == 'unSubscribeCommunity' && a.eventObject.name" class="d-flex">
             <p class="text-muted mr-1">bir topluluktan ayrıldı</p>
             <p class="font-weight-bold mr-1">{{ a.eventObject.name }}</p>
           </div>

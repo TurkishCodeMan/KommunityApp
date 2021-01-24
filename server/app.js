@@ -26,8 +26,8 @@ socketApi.io.attach(http);
 
 // Middlewares
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: true}));
 
 // Session is there
 app.use(cookieSession({

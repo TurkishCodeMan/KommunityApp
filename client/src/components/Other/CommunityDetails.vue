@@ -7,10 +7,11 @@
           <img
             class="img-fluid rounded"
             width="100"
-            src="../../assets/kommunity.jpg"
+            :src="require(`../../../../server/uploads/${community.imageUrl}`)"
             alt=""
           />
         </div>
+
         <div class="community-info">
           <h2>{{ community.name }}</h2>
           <div class="area-1">
@@ -57,13 +58,16 @@
         </div>
 
         <div class="row">
-          <div class="col-md-8 p-2 d-flex flex-column">
+          <div class="col-md-8 p-1 d-flex flex-column">
             <div class="title-content col-md-12">
               <h4 class="float-left mb-4">Topluluk Hakkında</h4>
               <img
-                src="../../assets/kommunity.jpg"
+                :src="
+                  require(`../../../../server/uploads/${community.imageUrl}`)
+                "
                 class="img-fluid rounded mb-3"
-                alt=""
+                :alt="'./' + community.imageUrl"
+                height="100"
               />
               <p class="float-left">{{ community.description }}</p>
             </div>
@@ -76,27 +80,17 @@
               </div>
             </div>
 
-            <div class="activity-card col-md-12 p-3 mb-5">
+            <div
+              class="activity-card col-md-12 p-3 mb-5"
+              v-for="activity in community.activities"
+              :key="activity.index"
+            >
               <div class="row">
                 <div class="col-md-8">
-                  <h5 class="float-left">Online JavaScript Kursu</h5>
-                  <p class="text-muted">Cumartesi,15 Ocak 2021</p>
-                  <p class="text-muted">Kimden : DevOps Malatya</p>
-                  <p>581 Üye Katılıyor</p>
-                </div>
-                <div class="col-md-4">
-                  <img src="../../assets/devops.jpg" class="img-fluid" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-card col-md-12 p-3">
-              <div class="row">
-                <div class="col-md-8">
-                  <h5 class="float-left">Online JavaScript Kursu</h5>
-                  <p class="text-muted">Cumartesi,15 Ocak 2021</p>
-                  <p class="text-muted">Kimden : DevOps Malatya</p>
-                  <p>581 Üye Katılıyor</p>
+                  <h5 class="float-left">{{ activity.name }}</h5>
+                  <p class="text-muted">{{ activity.endTime }}</p>
+                  <p class="text-muted">Kimden : {{ community.name }}</p>
+                  <p>{{ activity.participants.length }} kişi Katılıyor</p>
                 </div>
                 <div class="col-md-4">
                   <img src="../../assets/devops.jpg" class="img-fluid" alt="" />
@@ -116,11 +110,15 @@
                 ></textarea>
               </div>
             </div>
-
             <div class="tartisma-cards d-flex">
               <div class="tartisma-card p-3 d-flex">
                 <div class="author p-3">
-                    <img src="../../assets/devops.jpg" class="img- rounded" width="50" alt="">
+                  <img
+                    src="../../assets/devops.jpg"
+                    class="img- rounded"
+                    width="50"
+                    alt=""
+                  />
                   <h5>Mehmet TV</h5>
                   <p class="text-muted">1 Ay Önce</p>
                 </div>
@@ -140,7 +138,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4">dsfdsf4</div>
+          <div class="col-md-4"><RightMenu :community="community" /></div>
         </div>
       </div>
     </div>
@@ -149,18 +147,22 @@
 
 <script>
 import Header from "../Header";
+import RightMenu from "../SubParts/CommunityDetails/RightMenu";
+
 import { mapActions, mapGetters } from "vuex";
 export default {
   methods: {
     ...mapActions(["getCommunityById"]),
     ...mapGetters(["getCommunity"]),
   },
+
   computed: {
     community() {
       return this.getCommunity();
     },
   },
   components: {
+    RightMenu,
     appHeader: Header,
   },
   async mounted() {
@@ -170,8 +172,8 @@ export default {
 </script>
 
 <style scoped>
-.tartisma-text{
-    border-radius: 10px;
+.tartisma-text {
+  border-radius: 10px;
 }
 .tartisma-cards {
   background-color: #f4f6f9;

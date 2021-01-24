@@ -27,7 +27,7 @@
           />
         </li>
         <li class="nav-item mr-2">
-          <router-link tag="button" to="/create-community"  class="btn btn-success">Topluluk Oluştur</router-link>
+          <router-link tag="button" to="/create-community" v-if="user != undefined"  class="btn btn-success">Topluluk Oluştur</router-link>
         </li>
         <li class="nav-item d-flex" v-if="user != undefined">
           <div class="dropdown">
