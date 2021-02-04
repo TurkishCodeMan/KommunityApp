@@ -17,6 +17,7 @@ export default {
 </script>
 
 <style>
+@import url("./assets/css/style.css");
 body{
   box-sizing: border-box;
   margin: 0;

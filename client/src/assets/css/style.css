@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@font-face{
+    font-family: 'Campton-Medium',sans-serif;
+    src: url(Campton/Campton-Medium.otf);
+}
+
+:root {
+  --black: #252526;
+  --yellow: #FFBC00;
+  --iconColor:#D1D2D3;
+}
+
+* {
+  font-weight: 500;
+  font-family: 'Campton-Medium',sans-serif;
+
+}
+.dark-icon{
+    color: var(--iconColor);
+    font-size: 20px;
+}
+p {
+  margin: 0;
+}
+
+.container-black-bg {
+  background: var(--black);
+}
+
+.btn.btn-black {
+  background: var(--black);
+  color: #fff;
+}
+.btn.btn-yellow {
+  background: var(--yellow);
+  color: #fff;
+}

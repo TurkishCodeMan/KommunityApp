@@ -1,7 +1,7 @@
 <template>
-  <div class="nav d-flex pt-3 shadow bg-white rounded">
-    <nav class="text-center w-100 m-auto">
-      <ul class="d-flex navbar container">
+  <div class="nav d-flex pt-3 pb-2 shadow bg-white rounded align-items-center">
+    <nav class="text-center w-100 m-auto container shadow">
+      <ul class="d-flex navbar container" v-if="user">
         <li class="nav-item">
           <a href="#" class="navbar-brand">Kommunity</a>
         </li>
@@ -27,7 +27,13 @@
           />
         </li>
         <li class="nav-item mr-2">
-          <router-link tag="button" to="/create-community" v-if="user != undefined"  class="btn btn-success">Topluluk Oluştur</router-link>
+          <router-link
+            tag="button"
+            to="/create-community"
+            v-if="user != undefined"
+            class="btn btn-success"
+            >Topluluk Oluştur</router-link
+          >
         </li>
         <li class="nav-item d-flex" v-if="user != undefined">
           <div class="dropdown">
@@ -57,6 +63,18 @@
           <a href="#" class="text-dark" @click="login">Login</a>
         </li>
       </ul>
+
+      <ul class="d-flex navbar" v-if="!user">
+        <li class="nav-item">
+          <a href="#" class="navbar-brand">Kommunity</a>
+        </li>
+        <div class="d-flex">
+          <button class="btn btn-warning mr-2 btn-lg p-2">Kayıt Ol</button>
+          <button class="btn btn-black btn-lg p-2" @click="login">
+            Giriş Yap
+          </button>
+        </div>
+      </ul>
     </nav>
   </div>
 </template>
@@ -67,7 +85,12 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   methods: {
     ...mapGetters(["getUser"]),
-    ...mapActions(["getCommunitiesAction", "getActivitiesAction", "logout","getAdvicePeopleAction"]),
+    ...mapActions([
+      "getCommunitiesAction",
+      "getActivitiesAction",
+      "logout",
+      "getAdvicePeopleAction",
+    ]),
     ...mapMutations(["setUser", "setArray"]),
     login() {
       window.open(
@@ -84,7 +107,6 @@ export default {
         window.removeEventListener("message", this.myCallBack);
         await this.getAdvicePeopleAction();
         this.$router.push({ name: "home" });
-
       }
     },
 
@@ -112,6 +134,13 @@ export default {
 .nav {
   font-family: "Work Sans", sans-serif;
   box-shadow: 2px 0px 5px 2px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  width: 100%;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+
 }
 .navbar {
   list-style-type: none;

@@ -23,7 +23,7 @@
             <span class="float-left">{{ community.location }}</span>
           </div>
 
-          <div class="area-2">
+          <div class="area-2" v-if="community.members!=undefined">
             <i class="fas fa-user-friends mr-1"></i>
             <span class="mr-3">{{ community.members.length }} Üyeler</span>
           </div>
@@ -102,7 +102,7 @@
                   <h5 class="float-left">{{ activity.name }}</h5>
                   <p class="text-muted">{{ activity.endTime }}</p>
                   <p class="text-muted">Kimden : {{ community.name }}</p>
-                  <p>{{ activity.participants.length }} kişi Katılıyor</p>
+                  <p v-if="activity.participants!=undefined">{{ activity.participants.length }} kişi Katılıyor</p>
                 </div>
                 <div class="col-md-4">
                   <img src="../../assets/devops.jpg" class="img-fluid" alt="" />

@@ -197,7 +197,7 @@ const unSubscribeCommunity = async (req, res, next) => {
         await community.save();
         const user = await User.findOne({ _id: req.user._id });
         user.members.pop(req.user._id)
-        console.log(user.members);
+     
         await user.save();
         publish("events", req.user, "unSubscribeCommunity", community)
         return res.json(community);

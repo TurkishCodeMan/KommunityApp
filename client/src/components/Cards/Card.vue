@@ -65,7 +65,7 @@ export default {
   methods: {
     ...mapGetters(["getUser"]),
     ...mapActions(["subscribeCommunity", "unSubscribeCommunityAction"]),
-    memberControl() {
+    async memberControl() {
       if (this.a.members) {
         this.a.members.forEach((element) => {
           if (element == this.getUser()._id) {
